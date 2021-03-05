@@ -3,7 +3,6 @@ import CardNotas from '../components/card_notas';
 import '../css/nota.css';
 
 const Nota = () => {
-    let pedido
     return(
         <div>
             <h3>Nota</h3>

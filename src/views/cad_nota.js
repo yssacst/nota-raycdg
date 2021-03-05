@@ -1,121 +1,126 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from "react-hook-form";
 import '../css/nota.css';
 
 const CadNota = () => {
 
-    const[produto,setProduto] = useState([{
-        produto:'',
-        quantidade:0,
-        vl_unitario:0
-    }]);
-
-    const[newProduto,setNewProduto] = useState([{
-        produto:'',
-        quantidade:0,
-        vl_unitario:0    
-    }]);
-
-    function handleNewProduto(event){
-        console.log(event.target.value);
-      }
-
-    function handleProdutoChange() {
-        setProduto(...produto,produto);
-      }
-
       const [indexes, setIndexes] = React.useState([]);
-const [counter, setCounter] = React.useState(0);
-const { register, handleSubmit } = useForm();
+      const [counter, setCounter] = React.useState(0);
+      const { register, handleSubmit } = useForm();
+      const [total, setTotal] = React.useState(0);
+      
+      const onSubmit = data => {
+        let tt = 0;
+        data.produto.map((item, i)=>{
+          console.log(item.vluni*item.qtd)
+          tt+= (item.vluni*item.qtd)
+        })
+        // console.log('total: R$ '+tt)
+        setTotal(tt);
+      };
 
-const onSubmit = data => {
-console.log(data);
-};
+      const addProduto = () => {
+      setIndexes(prevIndexes => [...prevIndexes, counter]);
+      setCounter(prevCounter => prevCounter + 1);
+      };
 
-const addFriend = () => {
-setIndexes(prevIndexes => [...prevIndexes, counter]);
-setCounter(prevCounter => prevCounter + 1);
-};
+      const removeProduto = index => () => {
+      setIndexes(prevIndexes => [...prevIndexes.filter(item => item !== index)]);
+      //setCounter(prevCounter => prevCounter - 1);
+    };
+    
+    const limparLista = () => {
+      setIndexes([]);
+      setCounter(0)
+      setTotal(0);
+      };
 
-const removeFriend = index => () => {
-setIndexes(prevIndexes => [...prevIndexes.filter(item => item !== index)]);
-setCounter(prevCounter => prevCounter - 1);
-};
-
-const clearFriends = () => {
-setIndexes([]);
-setCounter(0)
-};
     return(
         <div>
-
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {indexes.map(index => {
-        const fieldName = `friends[${index}]`;
-        return (
-          <fieldset name={fieldName} key={fieldName}>
-            <label>
-              Produto {index}:
-              <input
-                type="text"
-                name={`${fieldName}.firstName`}
-                ref={register}
-              />
-            </label>
-            <label>
-              First Name {index}:
-              <input
-                type="text"
-                name={`${fieldName}.firstName`}
-                ref={register}
-              />
-            </label>
-
-            <label>
-              Last Name {index}:
-              <input
-                type="text"
-                name={`${fieldName}.lastName`}
-                ref={register}
-              />
-            </label>
-            <button type="button" onClick={removeFriend(index)}>
-              Remove
-            </button>
-          </fieldset>
-        );
-      })}
-
-      <button type="button" onClick={addFriend}>
-        Add Friend
-      </button>
-      <button type="button" onClick={clearFriends}>
-        Clear Friends
-      </button>
-      <input type="submit" />
-    </form>
-  
-            <hr/>
-            <div>Cadastrar nota</div>
-            <div>
-               <form>
-                   <label>Nome</label>
-                   <input/>
-               </form>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <label>Produto</label>
-                    <input type='text' name="produto" onChange={handleNewProduto}/>
-                    <label>Quantidade</label>
-                    <input type='text' name="quantidade" onChange={handleNewProduto}/>
-                    <label>Valor unitário</label>
-                    <input type='text' name="vl_unitario" onChange={handleNewProduto}/>
-                    <label>Total</label>
-                    <span></span>
-                    <button onClick={handleProdutoChange}>Cadastrar</button>
-                </form>
-            </div>
-            <hr/>
+          <h3>Cadastrar nova nota</h3>
+          <hr/>
+            <form className="frm-dados">
+              <label>
+                Nome cliente:
+                <input
+                  type="text"
+                  name="nome"
+                />
+              </label>
+              <label>
+                WhatsApp:
+                <input
+                  type="text"
+                  name="wpp"
+                />
+              </label>
+              <label>
+                E-mail:
+                <input
+                  type="text"
+                  name="email"
+                />
+              </label>
+            </form>
+            <form onSubmit={handleSubmit(onSubmit)} >
+              <div>
+                <button type="button" onClick={addProduto}>
+                  Incluir
+                </button>
+                <button type="button" onClick={limparLista}>
+                  Limpar 
+                </button>
+              </div>
+                {indexes.map(index => {
+                  const fieldName = `produto[${index}]`;
+                  return (
+                    <fieldset name={fieldName} key={fieldName} className="itens">
+                      <label>#{index}</label>
+                        <label>Produto:
+                          <input
+                            type="text"
+                            name={`${fieldName}.produto`}
+                            ref={register}
+                            placeholder="Produto"
+                            required
+                          />
+                        </label>
+                        <label>Qtd:
+                          <input
+                            type="number"
+                            name={`${fieldName}.qtd`}
+                            ref={register}
+                            placeholder="Quantidade"
+                            required
+                          />
+                        </label>
+                        <label>Vl Uni:
+                          <input
+                            type="number"
+                            name={`${fieldName}.vluni`}
+                            ref={register}
+                            placeholder="Valor Unitário"
+                            required
+                          />
+                        </label>
+                      <button type="button" onClick={removeProduto(index)}>
+                        Excluir
+                      </button>
+                    </fieldset>
+                  );
+                })}
+                <div>
+                <button type="button" >
+                  Calcular
+                </button>
+                <input type="submit" value="Registrar" />
+                </div>
+              </form>
+                <h4>Total: R${total}</h4>
+              <div className="footer">
+                <small>*qtd= quantidade / vl uni= Valor Unitário</small>
+              </div>
         </div>
-    );
-}
-export default CadNota;
+        );
+      }
+      export default CadNota;

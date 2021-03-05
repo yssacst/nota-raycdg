@@ -1,6 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
-import Nota from './views/nota';
+// import Nota from './views/nota';
 import CadNota from './views/cad_nota';
 
 function App() {

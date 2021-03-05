@@ -1,4 +1,24 @@
-.form-nota{
+*{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-bottom: 5px;
+}
+.frm-dados{
     margin-right: auto;
     margin-left:auto;
+    display: inline-flex;
+    flex-direction: column;
+    margin:10px;
+    padding:20px;
+    background-color: aquamarine;
+}
+.itens{
+    display: inline-flex;
+    flex-direction: row;
+    background-color:bisque;
+}
+.footer small{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color:azure
 }
